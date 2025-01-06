@@ -31,7 +31,7 @@ function route($method, $urlData, $formData) {
 			echo json_encode($response);
 		}
 		return;
-	} else if ($method == 'GET' && count($urlData) == 2) {
+	} else if ($method == 'GET' && count($urlData) === 2) {
 
 	}
 
