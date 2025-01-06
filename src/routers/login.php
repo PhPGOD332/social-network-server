@@ -10,8 +10,8 @@ use pumast3r\api\services\TokenService;
 
 function route($method, $urlData, $formData) {
     if ($method == "POST" && count($formData) == 2) {
-        $login = $urlData[0];
-        $hashedPassword = password_hash($urlData[1], PASSWORD_DEFAULT);
+        $login = $formData['login'];
+        $hashedPassword = password_hash($formData['password'], PASSWORD_DEFAULT);
 
         try {
             $connection = new ConnectionClass();
@@ -24,14 +24,14 @@ function route($method, $urlData, $formData) {
             $user = $query->fetch();
 
             if(!$user) {
-                throw ApiError::BadRequest('Пользователь с таким логином не найден');
+                ApiError::BadRequest('Пользователь с таким логином не найден');
 //                echo json_encode(['error' => 'Пользователь с таким логином не найден', 'code' => '400']);
             }
 
             $isPassEquals = strcmp($hashedPassword, password_verify($user->password, PASSWORD_DEFAULT));
 
             if (!$isPassEquals) {
-                throw ApiError::BadRequest('Неверный пароль');
+                ApiError::BadRequest('Неверный пароль');
 //                http_response_code(400);
 //                echo "Неверный пароль";
             }
@@ -49,7 +49,7 @@ function route($method, $urlData, $formData) {
 
             echo json_encode($returnUser);
         } catch (Exception $e) {
-            throw ApiError::InternalServerError('Произошла ошибка');
+            ApiError::OptionalError($e);
 //            echo json_encode(['error' => $e->getMessage()]);
         }
     }

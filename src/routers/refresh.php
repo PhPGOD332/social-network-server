@@ -16,7 +16,7 @@ function route($method, $urlData, $formData) {
 
             echo json_encode($userData);
         } catch (Exception $e) {
-            throw ApiError::InternalServerError('Произошла ошибка');
+            ApiError::InternalServerError('Произошла ошибка');
         }
     }
 }
