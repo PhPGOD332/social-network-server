@@ -28,7 +28,7 @@ function route($method, $urlData, $formData) {
 //                echo json_encode(['error' => 'Пользователь с таким логином не найден', 'code' => '400']);
             }
 
-            $isPassEquals = strcmp($hashedPassword, password_verify($user->password, PASSWORD_DEFAULT));
+            $isPassEquals = strcmp($hashedPassword, password_verify($user['password'], PASSWORD_DEFAULT));
 
             if (!$isPassEquals) {
                 ApiError::BadRequest('Неверный пароль');
@@ -36,7 +36,7 @@ function route($method, $urlData, $formData) {
 //                echo "Неверный пароль";
             }
 
-            $userDto = new UserDto($user);
+            $userDto = new UserDto(json_encode($user));
             $tokens = TokenService::generateTokens(json_encode($userDto->getInfoUser()));
 
             $returnUser = array(
