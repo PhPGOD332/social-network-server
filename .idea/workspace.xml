@@ -6,12 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="ef7a3c14-0046-4a06-a73d-5d22b08cf540" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dtos/user.dto.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/dtos/UserDto.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/exceptions/api.error.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/exceptions/ApiError.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/helpers/dotenv.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/helpers/DotenvClass.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/connect/ConnectionClass.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/connect/ConnectionClass.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routers/login.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/routers/login.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/routers/users.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/routers/users.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/services/token.service.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/TokenService.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/services/user.service.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/UserService.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,7 +92,7 @@
       <workItem from="1735737557880" duration="38000" />
       <workItem from="1735810066324" duration="5171000" />
       <workItem from="1735978408929" duration="594000" />
-      <workItem from="1736157608654" duration="14319000" />
+      <workItem from="1736157608654" duration="18681000" />
     </task>
     <servers />
   </component>

@@ -1,7 +1,6 @@
 <?php
 namespace pumast3r\api\connect;
 
-use Dotenv\Dotenv;
 use PDO;
 use pumast3r\api\helpers\DotenvClass;
 

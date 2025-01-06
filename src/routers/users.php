@@ -22,6 +22,7 @@ function route($method, $urlData, $formData) {
 			$query = $pdo->prepare($sql);
 			$query->execute(['id' => $id]);
 			$user = $query->fetch();
+            $user = json_encode($user);
 			$response = new UserDto($user);
 
 			echo $response->getInfoUser();

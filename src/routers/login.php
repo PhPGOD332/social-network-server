@@ -9,7 +9,7 @@ use pumast3r\api\exceptions\ApiError;
 use pumast3r\api\services\TokenService;
 
 function route($method, $urlData, $formData) {
-    if ($method == "POST" && count($urlData) == 2) {
+    if ($method == "POST" && count($formData) == 2) {
         $login = $urlData[0];
         $hashedPassword = password_hash($urlData[1], PASSWORD_DEFAULT);
 

@@ -40,7 +40,8 @@ function getFormData($method): array {
 }
 
 $method = $_SERVER['REQUEST_METHOD'];
-$formData = getFormData($method);
+//$formData = getFormData($method);
+$formData = json_decode(file_get_contents('php://input'), true);
 
 $url = (isset($_GET['q'])) ? $_GET['q'] : '';
 $url = rtrim($url, '/');
