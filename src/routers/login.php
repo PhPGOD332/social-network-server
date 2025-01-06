@@ -7,7 +7,9 @@ use pumast3r\api\connect\ConnectionClass;
 use pumast3r\api\dtos\UserDto;
 use pumast3r\api\exceptions\ApiError;
 use pumast3r\api\services\TokenService;
+use pumast3r\api\helpers\DotenvClass;
 
+DotenvClass::loadDotenv();
 function route($method, $urlData, $formData) {
     if ($method == "POST" && count($formData) == 2) {
         $login = $formData['login'];
@@ -45,7 +47,15 @@ function route($method, $urlData, $formData) {
                 'user' => $userDto
             );
 
-            setcookie('refreshToken', $returnUser['refreshToken'], time() + (86400 * 30), '/', $_ENV['SERVER_DOMAIN'], true, true);
+            setcookie('refreshToken', $returnUser['refreshToken'], time() + (86400 * 30), '/', $_ENV['SERVER_DOMAIN'], false, true);
+            setcookie('refreshToken', $returnUser['refreshToken'], [
+                'expires' => time() + (86400 * 30),
+                'path' => '/',
+                'domain' => $_SERVER['SERVER_NAME'],
+                'secure' => false,
+                'httponly' => true,
+                'samesite' => 'None'
+            ]);
 
             echo json_encode($returnUser);
         } catch (Exception $e) {

@@ -3,6 +3,7 @@
 namespace pumast3r\api\services;
 
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use pumast3r\api\connect\ConnectionClass;
 use pumast3r\api\exceptions\ApiError;
 use pumast3r\api\helpers\DotenvClass;
@@ -52,8 +53,8 @@ class TokenService {
         global $JWT_ACCESS_KEY;
 
         try {
-            $userData = JWT::decode($accessToken, $JWT_ACCESS_KEY);
-            return $userData;
+            JWT::decode($accessToken, new Key($JWT_ACCESS_KEY, 'HS256'));
+            return $accessToken;
         } catch (\Exception $e) {
             return null;
         }
@@ -63,8 +64,8 @@ class TokenService {
         global $JWT_REFRESH_KEY;
 
         try {
-            $userData = JWT::decode($refreshToken, $JWT_REFRESH_KEY);
-            return $userData;
+            JWT::decode($refreshToken, new Key($JWT_REFRESH_KEY, 'HS256'));
+            return $refreshToken;
         } catch (\Exception $e) {
             return null;
         }
@@ -81,7 +82,7 @@ class TokenService {
             $token = $query->fetch();
 
             if ($token) {
-                $sql = 'UPDATE tokens SET refresh_token = :refreshToken WHERE user_id = :useId';
+                $sql = 'UPDATE tokens SET refresh_token = :refreshToken WHERE user_id = :userId';
 
                 $query = $pdo->prepare($sql);
                 $query->execute(['refreshToken' => $refreshToken, 'userId' => $userID]);

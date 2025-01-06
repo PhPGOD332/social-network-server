@@ -12,14 +12,14 @@ class UserService {
 
     public static function refresh(string $refreshToken) {
         if (!$refreshToken) {
-            throw ApiError::UnauthorizedError();
+            ApiError::UnauthorizedError();
         }
 
         $userData = TokenService::validateRefreshToken($refreshToken);
         $tokenFromDb = TokenService::findToken($refreshToken);
 
         if (!$userData || !$tokenFromDb) {
-            throw ApiError::UnauthorizedError();
+            ApiError::UnauthorizedError();
         }
 
         $connection = new ConnectionClass();
