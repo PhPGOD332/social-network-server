@@ -11,7 +11,7 @@ use pumast3r\api\services\TokenService;
 function route($method, $urlData, $formData) {
     if ($method == "POST" && count($formData) == 2) {
         $login = $formData['login'];
-        $hashedPassword = password_hash($formData['password'], PASSWORD_DEFAULT);
+        $password = $formData['password'];
 
         try {
             $connection = new ConnectionClass();
@@ -28,7 +28,7 @@ function route($method, $urlData, $formData) {
 //                echo json_encode(['error' => 'Пользователь с таким логином не найден', 'code' => '400']);
             }
 
-            $isPassEquals = strcmp($hashedPassword, password_verify($user['password'], PASSWORD_DEFAULT));
+            $isPassEquals = password_verify($password, $user['password']);
 
             if (!$isPassEquals) {
                 ApiError::BadRequest('Неверный пароль');
@@ -42,7 +42,7 @@ function route($method, $urlData, $formData) {
             $returnUser = array(
                 'accessToken' => $tokens['accessToken'],
                 'refreshToken' => $tokens['refreshToken'],
-                'user' => json_encode($userDto)
+                'user' => $userDto
             );
 
             setcookie('refreshToken', $returnUser['refreshToken'], time() + (86400 * 30), '/', $_ENV['SERVER_DOMAIN'], true, true);
