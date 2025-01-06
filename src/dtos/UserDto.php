@@ -6,7 +6,7 @@ class UserDto {
     public string $login;
     public string $email;
     public string $phone;
-    public string $avatar;
+    public string | null $avatar;
     public string $role;
 
     public function __construct($user) {
