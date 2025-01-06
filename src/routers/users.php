@@ -5,7 +5,7 @@ use Error;
 
 use Exception;
 use pumast3r\api\connect\ConnectionClass;
-use pumast3r\api\types\TUser;
+use pumast3r\api\dtos\UserDto;
 
 function route($method, $urlData, $formData) {
 
@@ -14,6 +14,7 @@ function route($method, $urlData, $formData) {
 		$response = array();
 
 		try {
+			
 
 			$connection = new ConnectionClass();
 
@@ -28,22 +29,17 @@ function route($method, $urlData, $formData) {
 
 
 			$user = $query->fetch();
-			$response = new TUser(json_encode($user));
+			$response = new UserDto($user);
 
-
-			echo json_encode(array(
-				'method' => 'GET',
-				'id' => $id,
-				'login' => $response->login,
-				'email' => $response->email,
-				'password' => $response->password
-			));
+			echo $response->getInfoUser();
 		} catch(Exception $e) {
 			$response['error'] = $e->getMessage();
 
 			echo json_encode($response);
 		}
 		return;
+	} else if ($method == 'GET' && count($urlData) == 2) {
+
 	}
 
 	header('HTTP/1.0 400 Bad Request');

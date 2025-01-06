@@ -3,9 +3,9 @@ namespace pumast3r\api\connect;
 
 use Dotenv\Dotenv;
 use PDO;
+use pumast3r\api\helpers\DotenvClass;
 
-$dotenv = Dotenv::createImmutable(__DIR__ . '/../../');
-$dotenv->load();
+DotenvClass::loadDotenv();
 
 class ConnectionClass {
 	private string $DB_HOST;
