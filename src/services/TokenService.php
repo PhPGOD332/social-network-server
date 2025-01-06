@@ -94,7 +94,7 @@ class TokenService {
 
             return true;
         } catch (\Exception $e) {
-            ApiError::InternalServerError();
+            ApiError::InternalServerError($e);
         }
     }
 
