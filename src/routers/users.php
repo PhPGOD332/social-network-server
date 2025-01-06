@@ -14,20 +14,13 @@ function route($method, $urlData, $formData) {
 		$response = array();
 
 		try {
-			
-
 			$connection = new ConnectionClass();
-
-
 			$pdo = $connection->getPDO();
-
 			$sql = 'SELECT * FROM users WHERE id = :id';
 
 
 			$query = $pdo->prepare($sql);
 			$query->execute(['id' => $id]);
-
-
 			$user = $query->fetch();
 			$response = new UserDto($user);
 

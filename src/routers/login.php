@@ -5,10 +5,11 @@ namespace pumast3r\api\routers;
 use Exception;
 use pumast3r\api\connect\ConnectionClass;
 use pumast3r\api\dtos\UserDto;
+use pumast3r\api\exceptions\ApiError;
 use pumast3r\api\services\TokenService;
 
 function route($method, $urlData, $formData) {
-    if ($method == "GET" && count($urlData) == 2) {
+    if ($method == "POST" && count($urlData) == 2) {
         $login = $urlData[0];
         $hashedPassword = password_hash($urlData[1], PASSWORD_DEFAULT);
 
@@ -23,20 +24,20 @@ function route($method, $urlData, $formData) {
             $user = $query->fetch();
 
             if(!$user) {
-                http_response_code(400);
-                echo "Пользователь с таким логином не найден";
+                throw ApiError::BadRequest('Пользователь с таким логином не найден');
 //                echo json_encode(['error' => 'Пользователь с таким логином не найден', 'code' => '400']);
             }
 
             $isPassEquals = strcmp($hashedPassword, password_verify($user->password, PASSWORD_DEFAULT));
 
             if (!$isPassEquals) {
-                http_response_code(400);
-                echo "Неверный пароль";
+                throw ApiError::BadRequest('Неверный пароль');
+//                http_response_code(400);
+//                echo "Неверный пароль";
             }
 
             $userDto = new UserDto($user);
-            $tokens = TokenService::generateTokens(json_encode($userDto->getInfoUser('GET')));
+            $tokens = TokenService::generateTokens(json_encode($userDto->getInfoUser()));
 
             $returnUser = array(
                 'accessToken' => $tokens['accessToken'],
@@ -48,7 +49,8 @@ function route($method, $urlData, $formData) {
 
             echo json_encode($returnUser);
         } catch (Exception $e) {
-            echo json_encode(['error' => $e->getMessage()]);
+            throw ApiError::InternalServerError('Произошла ошибка');
+//            echo json_encode(['error' => $e->getMessage()]);
         }
     }
 }
