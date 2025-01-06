@@ -7,7 +7,7 @@ use pumast3r\api\exceptions\ApiError;
 use pumast3r\api\services\UserService;
 
 function route($method, $urlData, $formData) {
-    if ($method == "POST") {
+    if ($method == "GET") {
         try {
             $refreshToken = $_COOKIE['refreshToken'];
             $userData = UserService::refresh($refreshToken);
@@ -16,7 +16,7 @@ function route($method, $urlData, $formData) {
                 'expires' => time() + (86400 * 30),
                 'path' => '/',
                 'domain' => $_SERVER['SERVER_NAME'],
-                'secure' => false,
+                'secure' => true,
                 'httponly' => true,
                 'samesite' => 'None'
             ]);

@@ -47,12 +47,11 @@ function route($method, $urlData, $formData) {
                 'user' => $userDto
             );
 
-            setcookie('refreshToken', $returnUser['refreshToken'], time() + (86400 * 30), '/', $_ENV['SERVER_DOMAIN'], false, true);
             setcookie('refreshToken', $returnUser['refreshToken'], [
                 'expires' => time() + (86400 * 30),
                 'path' => '/',
                 'domain' => $_SERVER['SERVER_NAME'],
-                'secure' => false,
+                'secure' => true,
                 'httponly' => true,
                 'samesite' => 'None'
             ]);
