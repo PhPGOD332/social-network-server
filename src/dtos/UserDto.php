@@ -20,15 +20,15 @@ class UserDto {
         $this->role = $decodeUser['role'];
     }
 
-    public function getInfoUser(): string {
-        return json_encode(array(
+    public function getInfoUser(): array {
+        return array(
             'id' => $this->id,
             'login' => $this->login,
             'email' => $this->email,
             'phone' => $this->phone,
             'avatar' => $this->avatar,
             'role' => $this->role,
-        ));
+        );
     }
 
 }

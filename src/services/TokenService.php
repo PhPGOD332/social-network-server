@@ -26,7 +26,7 @@ class TokenService {
             'iss' => $_ENV['SERVER_DOMAIN'],
             'aud' => $_ENV['SERVER_DOMAIN'],
             'iat' => $now,
-            'nbf' => $now + 10,
+            'nbf' => $now,
             'exp' => ($now + 60) * 30,
             'data' => json_decode($payload),
         ];
@@ -35,7 +35,7 @@ class TokenService {
             'iss' => $_ENV['SERVER_DOMAIN'],
             'aud' => $_ENV['SERVER_DOMAIN'],
             'iat' => $now,
-            'nbf' => $now + 10,
+            'nbf' => $now,
             'exp' => ($now + 60) * 60 * 24 * 30,
             'data' => json_decode($payload),
         ];
@@ -86,9 +86,10 @@ class TokenService {
 
                 $query = $pdo->prepare($sql);
                 $query->execute(['refreshToken' => $refreshToken, 'userId' => $userID]);
+								exit;
             }
 
-            $sql = 'INSERT INTO tokens (refresh_token, user_id) VALUES(:refreshToken, :userId)';
+          $sql = 'INSERT INTO tokens (refresh_token, user_id) VALUES(:refreshToken, :userId)';
 
             $query = $pdo->prepare($sql);
             $query->execute(['refreshToken' => $refreshToken, 'userId' => $userID]);
@@ -111,4 +112,20 @@ class TokenService {
 
         return $token;
     }
+
+		public static function removeToken(string $refreshToken) {
+			try {
+				$connection = new ConnectionClass();
+				$pdo = $connection->getPDO();
+				$sql = 'DELETE FROM tokens WHERE refresh_token = :token';
+
+				$query = $pdo->prepare($sql);
+				$query->execute(['token' => $refreshToken]);
+
+				$token = $query->fetch();
+				return $token;
+			} catch (\Exception $e) {
+				ApiError::InternalServerError($e);
+			}
+		}
 }

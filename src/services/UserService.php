@@ -14,7 +14,7 @@ class UserService {
         if (!$refreshToken) {
             ApiError::UnauthorizedError();
         }
-
+	    echo json_encode(['refresh' => $refreshToken]);
         $userData = TokenService::validateRefreshToken($refreshToken);
 
         $tokenFromDb = TokenService::findToken($refreshToken);
@@ -32,7 +32,8 @@ class UserService {
 
         $user = $query->fetch();
         $userDto = new UserDto(json_encode($user));
-        $tokens = TokenService::generateTokens($userDto->getInfoUser());
+        $tokens = TokenService::generateTokens(json_encode($userDto->getInfoUser()));
+
         TokenService::saveToken($userDto->id, $tokens['refreshToken']);
 
         $returnUser = array(
