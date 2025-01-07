@@ -16,6 +16,7 @@ class UserService {
         }
 
         $userData = TokenService::validateRefreshToken($refreshToken);
+
         $tokenFromDb = TokenService::findToken($refreshToken);
 
         if (!$userData || !$tokenFromDb) {

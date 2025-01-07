@@ -40,6 +40,7 @@ function route($method, $urlData, $formData) {
 
             $userDto = new UserDto(json_encode($user));
             $tokens = TokenService::generateTokens(json_encode($userDto->getInfoUser()));
+						TokenService::saveToken($userDto->id, $tokens['refreshToken']);
 
             $returnUser = array(
                 'accessToken' => $tokens['accessToken'],
