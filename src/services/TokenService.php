@@ -86,7 +86,7 @@ class TokenService {
 
                 $query = $pdo->prepare($sql);
                 $query->execute(['refreshToken' => $refreshToken, 'userId' => $userID]);
-								exit;
+								return true;
             }
 
           $sql = 'INSERT INTO tokens (refresh_token, user_id) VALUES(:refreshToken, :userId)';

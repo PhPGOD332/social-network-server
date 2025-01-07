@@ -14,7 +14,6 @@ class UserService {
         if (!$refreshToken) {
             ApiError::UnauthorizedError();
         }
-	    echo json_encode(['refresh' => $refreshToken]);
         $userData = TokenService::validateRefreshToken($refreshToken);
 
         $tokenFromDb = TokenService::findToken($refreshToken);

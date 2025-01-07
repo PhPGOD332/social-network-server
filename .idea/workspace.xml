@@ -6,8 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="ef7a3c14-0046-4a06-a73d-5d22b08cf540" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/dtos/UserDto.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/dtos/UserDto.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routers/logout.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/routers/logout.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/services/TokenService.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/TokenService.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/services/UserService.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/UserService.php" afterDir="false" />
     </list>
@@ -67,11 +65,6 @@
       <recent name="G:\Workflow\УрГЭУ\Курсовые\4 сессия\social-network\social-network-server" />
     </key>
   </component>
-  <component name="RunManager">
-    <configuration name="Unnamed" type="PhpLocalRunConfigurationType" factoryName="PHP Console" nameIsGenerated="true">
-      <method v="2" />
-    </configuration>
-  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -94,7 +87,7 @@
       <workItem from="1735978408929" duration="594000" />
       <workItem from="1736157608654" duration="33202000" />
       <workItem from="1736229620598" duration="9213000" />
-      <workItem from="1736249468071" duration="1811000" />
+      <workItem from="1736249468071" duration="3180000" />
     </task>
     <servers />
   </component>
