@@ -10,7 +10,7 @@ use pumast3r\api\services\TokenService;
 function route($method, $urlData, $formData) {
 	if ($method == "POST") {
 		try {
-			$refreshToken = $formData['refreshData'];
+			$refreshToken = $_COOKIE['refreshToken'];
 			$token = TokenService::removeToken($refreshToken);
 			echo json_encode(['token' => $token]);
 		} catch (Exception $e) {
