@@ -54,6 +54,16 @@ class UserService {
 				$patronymic = $regData['patronymic'];
 				$dateBirth = $regData['dateBirth'];
 
+				$userInDb = self::getUser(['login', $login]);
+
+				if ($login == $userInDb['login']) {
+					ApiError::BadRequest('Такой логин уже существует');
+				}
+
+				if ($phone == $userInDb['phone']) {
+					ApiError::BadRequest('Такой телефон уже существует');
+				}
+
 				$connection = new ConnectionClass();
 				$pdo = $connection->getPDO();
 
@@ -73,7 +83,7 @@ class UserService {
 
 				$userID = $pdo->lastInsertId();
 
-				$user = UserService::getUser(['id', $userID]);
+				$user = self::getUser(['id', $userID]);
 
 				$userDto = new UserDto(json_encode($user));
 				$tokens = TokenService::generateTokens(json_encode($userDto->getInfoUser()));
