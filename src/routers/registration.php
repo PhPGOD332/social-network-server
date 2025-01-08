@@ -13,7 +13,7 @@ function route($method, $urlData, $formData) {
 		try {
 			$returnData = UserService::registration($formData);
 
-			setcookie('refreshToken', $returnUser['refreshToken'], [
+			setcookie('refreshToken', $returnData['refreshToken'], [
 				'expires' => time() + (86400 * 30),
 				'path' => '/',
 				'domain' => $_SERVER['SERVER_NAME'],
