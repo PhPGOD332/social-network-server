@@ -8,6 +8,7 @@ use pumast3r\api\dtos\UserDto;
 use pumast3r\api\exceptions\ApiError;
 use pumast3r\api\services\TokenService;
 use pumast3r\api\helpers\DotenvClass;
+use pumast3r\api\services\UserService;
 
 DotenvClass::loadDotenv();
 function route($method, $urlData, $formData) {
@@ -16,14 +17,7 @@ function route($method, $urlData, $formData) {
         $password = $formData['password'];
 
         try {
-            $connection = new ConnectionClass();
-            $pdo = $connection->getPDO();
-
-            $sql = 'SELECT * FROM users WHERE login = :login';
-            $query = $pdo->prepare($sql);
-            $query->execute(['login' => $login]);
-
-            $user = $query->fetch();
+            $user = UserService::getUser(['login', $login]);
 
             if(!$user) {
                 ApiError::BadRequest('Пользователь с таким логином не найден');
