@@ -1,10 +1,16 @@
 <?php
 namespace pumast3r\api\dtos;
 
+use DateTime;
+
 class UserDto {
     public int $id;
     public string $login;
-    public string $email;
+		public string $surname;
+		public string $name;
+		public string $patronymic;
+		public DateTime $dateBirth;
+    public string | null $email;
     public string $phone;
     public string | null $avatar;
     public string $role;
@@ -14,6 +20,10 @@ class UserDto {
 
         $this->id = $decodeUser['id'];
         $this->login = $decodeUser['login'];
+				$this->surname = $decodeUser['surname'];
+				$this->name = $decodeUser['name'];
+				$this->patronymic = $decodeUser['patronymic'];
+				$this->dateBirth = $decodeUser['dateBirth'];
         $this->email = $decodeUser['email'];
         $this->phone = $decodeUser['phone'];
         $this->avatar = $decodeUser['avatar'];
@@ -24,6 +34,10 @@ class UserDto {
         return array(
             'id' => $this->id,
             'login' => $this->login,
+						'surname' => $this->surname,
+						'name' => $this->name,
+						'patronymic' => $this->patronymic,
+						'dateBirth' => $this->dateBirth,
             'email' => $this->email,
             'phone' => $this->phone,
             'avatar' => $this->avatar,
