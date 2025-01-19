@@ -108,7 +108,7 @@ class UserService {
 			$user = $query->fetch();
 
 			$dateBirth = date('d.m.Y', strtotime($user['date_birth']));
-
+			
 			$user['date_birth'] = $dateBirth;
 
 			return $user;
