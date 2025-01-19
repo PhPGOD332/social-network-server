@@ -28,8 +28,8 @@ function route($method, $urlData, $formData) {
 		}
 	}
 
-	header('HTTP/1.0 400 Bad Request');
-	echo json_encode(array(
-		'error' => 'Bad Request',
-	));
+//	header('HTTP/1.0 400 Bad Request');
+//	echo json_encode(array(
+//		'error' => 'Bad Request',
+//	));
 }

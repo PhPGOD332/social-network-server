@@ -26,7 +26,7 @@ class UserService {
         $userDto = new UserDto(json_encode($user));
         $tokens = TokenService::generateTokens(json_encode($userDto->getInfoUser()));
 
-        TokenService::saveToken($userDto->id, $tokens['refreshToken']);
+        TokenService::saveToken($userDto->_id, $tokens['refreshToken']);
 
         $returnUser = array(
             'accessToken' => $tokens['accessToken'],
@@ -80,7 +80,7 @@ class UserService {
 
 				$userDto = new UserDto(json_encode($user));
 				$tokens = TokenService::generateTokens(json_encode($userDto->getInfoUser()));
-				TokenService::saveToken($userDto->id, $tokens['refreshToken']);
+				TokenService::saveToken($userDto->_id, $tokens['refreshToken']);
 
 				$returnUser = array(
 					'accessToken' => $tokens['accessToken'],
@@ -108,7 +108,7 @@ class UserService {
 			$user = $query->fetch();
 
 			$dateBirth = date('d.m.Y', strtotime($user['date_birth']));
-			
+
 			$user['date_birth'] = $dateBirth;
 
 			return $user;

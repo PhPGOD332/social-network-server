@@ -4,7 +4,7 @@ namespace pumast3r\api\dtos;
 use DateTime;
 
 class UserDto {
-    public int $id;
+    public int $_id;
     public string $login;
 		public string $surname;
 		public string $name;
@@ -18,7 +18,7 @@ class UserDto {
     public function __construct(string $user) {
         $decodeUser = json_decode($user, true);
 
-        $this->id = $decodeUser['id'];
+        $this->_id = $decodeUser['id'];
         $this->login = $decodeUser['login'];
 				$this->surname = $decodeUser['surname'];
 				$this->name = $decodeUser['name'];
@@ -32,7 +32,7 @@ class UserDto {
 
     public function getInfoUser(): array {
         return array(
-            'id' => $this->id,
+            '_id' => $this->_id,
             'login' => $this->login,
 						'surname' => $this->surname,
 						'name' => $this->name,
