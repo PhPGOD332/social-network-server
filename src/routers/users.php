@@ -14,10 +14,14 @@ function route($method, $urlData, $formData) {
 	if ($method === 'GET' && count($urlData) === 1) {
 		try {
 			$login = $urlData[0];
-			$user = new UserDto(json_encode(UserService::getUser(['login', $login])));
-			$response = array(
-				'user' => $user
-			);
+			$user = UserService::getUser(['login', $login]);
+
+			if (!$user) {
+				ApiError::BadRequest('Такого пользователя не существует');
+			}
+
+			$userDto = new UserDto(json_encode($user));
+			$response = $userDto;
 			echo json_encode($response);
 		} catch (Exception $e) {
 			ApiError::OptionalError($e);
