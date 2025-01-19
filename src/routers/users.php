@@ -12,32 +12,9 @@ use pumast3r\api\services\UserService;
 function route($method, $urlData, $formData) {
 
 	if ($method === 'GET' && count($urlData) === 1) {
-		$id = $urlData[0];
-		$response = array();
-
 		try {
-			$connection = new ConnectionClass();
-			$pdo = $connection->getPDO();
-			$sql = 'SELECT * FROM users WHERE id = :id';
-
-
-			$query = $pdo->prepare($sql);
-			$query->execute(['id' => $id]);
-			$user = $query->fetch();
-            $user = json_encode($user);
-			$response = new UserDto($user);
-
-			echo $response->getInfoUser();
-		} catch(Exception $e) {
-			$response['error'] = $e->getMessage();
-
-			echo json_encode($response);
-		}
-		return;
-	} else if ($method == 'GET' && count($formData) === 1 && count($urlData) === 2) {
-		try {
-			$login = $formData['login'];
-			$user = new UserDto(json_encode(UserService::getUser($login)));
+			$login = $urlData[0];
+			$user = new UserDto(json_encode(UserService::getUser(['login', $login])));
 			$response = array(
 				'user' => $user
 			);
