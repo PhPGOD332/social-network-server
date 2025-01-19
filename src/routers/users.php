@@ -34,9 +34,9 @@ function route($method, $urlData, $formData) {
 			echo json_encode($response);
 		}
 		return;
-	} else if ($method == 'GET' && count($formData) === 0 && count($urlData) === 1) {
+	} else if ($method == 'GET' && count($formData) === 1 && count($urlData) === 2) {
 		try {
-			$login = $urlData[0];
+			$login = $formData['login'];
 			$user = new UserDto(json_encode(UserService::getUser($login)));
 			$response = array(
 				'user' => $user

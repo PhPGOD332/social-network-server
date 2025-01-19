@@ -109,8 +109,6 @@ class UserService {
 
 			$dateBirth = date('d.m.Y', strtotime($user['date_birth']));
 
-			echo json_encode(['date' => $user['date_birth']]);
-
 			$user['birth_date'] = $dateBirth;
 
 			return $user;
