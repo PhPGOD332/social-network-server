@@ -9,7 +9,6 @@ use pumast3r\api\exceptions\ApiError;
 
 class UserService {
 
-
     public static function refresh(string $refreshToken) {
         if (!$refreshToken) {
             ApiError::UnauthorizedError();

@@ -6,6 +6,8 @@ use Error;
 use Exception;
 use pumast3r\api\connect\ConnectionClass;
 use pumast3r\api\dtos\UserDto;
+use pumast3r\api\exceptions\ApiError;
+use pumast3r\api\services\UserService;
 
 function route($method, $urlData, $formData) {
 
@@ -32,8 +34,17 @@ function route($method, $urlData, $formData) {
 			echo json_encode($response);
 		}
 		return;
-	} else if ($method == 'GET' && count($urlData) === 2) {
-
+	} else if ($method == 'GET' && count($formData) === 0 && count($urlData) === 1) {
+		try {
+			$login = $urlData[0];
+			$user = new UserDto(json_encode(UserService::getUser($login)));
+			$response = array(
+				'user' => $user
+			);
+			echo json_encode($response);
+		} catch (Exception $e) {
+			ApiError::OptionalError($e);
+		}
 	}
 
 	header('HTTP/1.0 400 Bad Request');

@@ -15,7 +15,7 @@ class UserDto {
     public string | null $avatar;
     public string $role;
 
-    public function __construct($user) {
+    public function __construct(string $user) {
         $decodeUser = json_decode($user, true);
 
         $this->id = $decodeUser['id'];
