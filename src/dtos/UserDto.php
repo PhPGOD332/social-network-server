@@ -9,7 +9,7 @@ class UserDto {
 		public string $surname;
 		public string $name;
 		public string $patronymic;
-		public DateTime $dateBirth;
+		public string $dateBirth;
     public string | null $email;
     public string $phone;
     public string | null $avatar;
@@ -23,7 +23,7 @@ class UserDto {
 				$this->surname = $decodeUser['surname'];
 				$this->name = $decodeUser['name'];
 				$this->patronymic = $decodeUser['patronymic'];
-				$this->dateBirth = $decodeUser['dateBirth'];
+				$this->dateBirth = $decodeUser['birth_date'];
         $this->email = $decodeUser['email'];
         $this->phone = $decodeUser['phone'];
         $this->avatar = $decodeUser['avatar'];
@@ -44,5 +44,4 @@ class UserDto {
             'role' => $this->role,
         );
     }
-
 }

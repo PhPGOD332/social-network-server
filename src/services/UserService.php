@@ -21,14 +21,8 @@ class UserService {
             ApiError::UnauthorizedError();
         }
 
-        $connection = new ConnectionClass();
-        $pdo = $connection->getPDO();
-        $sql = 'SELECT * FROM users WHERE id = :id';
+				$user = self::getUser(['id', $tokenFromDb['user_id']]);
 
-        $query = $pdo->prepare($sql);
-        $query->execute(['id' => $tokenFromDb['user_id']]);
-
-        $user = $query->fetch();
         $userDto = new UserDto(json_encode($user));
         $tokens = TokenService::generateTokens(json_encode($userDto->getInfoUser()));
 
@@ -112,6 +106,10 @@ class UserService {
 			$query->execute(['value' => $dataValue]);
 
 			$user = $query->fetch();
+
+			$birthDate = date('d.m.Y', strtotime($user['birth_date']));
+
+			$user['birth_date'] = $birthDate;
 
 			return $user;
 		}
