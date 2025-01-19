@@ -23,7 +23,7 @@ class UserDto {
 				$this->surname = $decodeUser['surname'];
 				$this->name = $decodeUser['name'];
 				$this->patronymic = $decodeUser['patronymic'];
-				$this->dateBirth = $decodeUser['birth_date'];
+				$this->dateBirth = $decodeUser['date_birth'];
         $this->email = $decodeUser['email'];
         $this->phone = $decodeUser['phone'];
         $this->avatar = $decodeUser['avatar'];
