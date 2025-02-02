@@ -107,10 +107,26 @@ class UserService {
 
 			$user = $query->fetch();
 
-			$dateBirth = date('d.m.Y', strtotime($user['date_birth']));
+			$dateBirth = date('Y-m-d', strtotime($user['date_birth']));
 
 			$user['date_birth'] = $dateBirth;
 
 			return $user;
+		}
+
+		static public function editUser(array $data) {
+			$name = $data['name'];
+			$surname = $data['surname'];
+			$patronymic = $data['patronymic'];
+			$dateBirth = $data['dateBirth'];
+
+			if ($data['file']) {
+				$tmp_name = $_FILES[0];
+				move_uploaded_file($tmp_name, $_SERVER['DOCUMENT_ROOT']);
+			}
+
+			$connection = new ConnectionClass();
+			$pdo = $connection->getPDO();
+			$sql = 'UPDATE users SET ';
 		}
 }

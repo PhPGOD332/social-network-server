@@ -59,6 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 header('Content-Type: application/json');
 
+
 $method = $_SERVER['REQUEST_METHOD'];
 //$formData = getFormData($method);
 $formData = json_decode(file_get_contents('php://input'), true);

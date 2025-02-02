@@ -26,6 +26,20 @@ function route($method, $urlData, $formData) {
 		} catch (Exception $e) {
 			ApiError::OptionalError($e);
 		}
+	} else if ($method === 'POST' && isset($formData)) {
+		try {
+//			$response = UserService::editUser($formData);
+
+			echo json_encode($formData);
+
+//			$userData = [
+//				'user' => $formData
+//			];
+
+//			$returnData = UserService::editUser($userData);
+		} catch (Exception $e) {
+			ApiError::OptionalError($e);
+		}
 	}
 
 //	header('HTTP/1.0 400 Bad Request');
