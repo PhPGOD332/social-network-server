@@ -3,11 +3,44 @@
 namespace pumast3r\api\services;
 
 use Exception;
+use PDO;
 use pumast3r\api\connect\ConnectionClass;
 use pumast3r\api\dtos\UserDto;
 use pumast3r\api\exceptions\ApiError;
 
 class UserService {
+
+    public static function getFriends(string $userId) {
+        $connection = new ConnectionClass();
+        $pdo = $connection->getPDO();
+
+        $sql = 'SELECT * FROM friends_list WHERE user_id = :user_id';
+        $listQuery = $pdo->prepare($sql);
+        $listQuery->execute([':user_id' => $userId]);
+        $friendsList = $listQuery->fetch();
+
+        if (count($friendsList) == 0) {
+            ApiError::BadRequest('Друзья отсутствую');
+        }
+
+        $sql = 'SELECT * FROM friends WHERE friends_list_id = :id';
+        $friendsQuery = $pdo->prepare($sql);
+        $friendsQuery->execute([':id' => $friendsList['id']]);
+        $friends = $friendsQuery->fetchAll(PDO::FETCH_ASSOC);
+
+        $returnFriends = [];
+
+        foreach ($friends as $key => $friend) {
+            $sql = 'SELECT * FROM users WHERE id = :id';
+            $userQuery = $pdo->prepare($sql);
+            $userQuery->execute([':id' => $friend['friend_id']]);
+            $user = $userQuery->fetch(PDO::FETCH_ASSOC);
+            $newFriend = new UserDto(json_encode($user));
+            $returnFriends[$key] = $newFriend;
+        }
+
+        return $returnFriends;
+    }
 
     public static function refresh(string $refreshToken) {
         if (!$refreshToken) {
@@ -21,7 +54,9 @@ class UserService {
             ApiError::UnauthorizedError();
         }
 
-				$user = self::getUser(['id', $tokenFromDb['user_id']]);
+        $user = self::getUser(['id', $tokenFromDb['user_id']]);
+
+        $user['friends'] = UserService::getFriends($user['id']);
 
         $userDto = new UserDto(json_encode($user));
         $tokens = TokenService::generateTokens(json_encode($userDto->getInfoUser()));
@@ -37,96 +72,98 @@ class UserService {
         return $returnUser;
     }
 
-		public static function registration(array $regData) {
-			try {
-				$login = $regData['login'];
-				$password = password_hash($regData['password'], PASSWORD_DEFAULT);
-				$phone = $regData['phone'];
-				$surname = $regData['surname'];
-				$name = $regData['name'];
-				$patronymic = $regData['patronymic'];
-				$dateBirth = $regData['dateBirth'];
+    public static function registration(array $regData) {
+        try {
+            $login = $regData['login'];
+            $password = password_hash($regData['password'], PASSWORD_DEFAULT);
+            $phone = $regData['phone'];
+            $surname = $regData['surname'];
+            $name = $regData['name'];
+            $patronymic = $regData['patronymic'];
+            $dateBirth = $regData['dateBirth'];
 
-				$userInDb = self::getUser(['login', $login]);
+            $userInDb = self::getUser(['login', $login]);
 
-				if ($login == $userInDb['login']) {
-					ApiError::BadRequest('Такой логин уже существует');
-				}
+            if ($login == $userInDb['login']) {
+                ApiError::BadRequest('Такой логин уже существует');
+            }
 
-				if ($phone == $userInDb['phone']) {
-					ApiError::BadRequest('Такой телефон уже существует');
-				}
+            if ($phone == $userInDb['phone']) {
+                ApiError::BadRequest('Такой телефон уже существует');
+            }
 
-				$connection = new ConnectionClass();
-				$pdo = $connection->getPDO();
+            $connection = new ConnectionClass();
+            $pdo = $connection->getPDO();
 
-				$sql = "INSERT INTO users (login, password, surname, name, patronymic, date_birth, phone, role) VALUES(:login, :password, :surname, :name, :patronymic, :dateBirth, :phone, 'USER')";
-				$query = $pdo->prepare($sql);
-				$query->execute(
-					[
-						'login' => $login,
-						'password' => $password,
-						'surname' => $surname,
-						'name' => $name,
-						'patronymic' => $patronymic,
-						'dateBirth' => $dateBirth,
-						'phone' => $phone
-					]
-				);
+            $sql = "INSERT INTO users (login, password, surname, name, patronymic, date_birth, phone, role) VALUES(:login, :password, :surname, :name, :patronymic, :dateBirth, :phone, 'USER')";
+            $query = $pdo->prepare($sql);
+            $query->execute(
+                [
+                    'login' => $login,
+                    'password' => $password,
+                    'surname' => $surname,
+                    'name' => $name,
+                    'patronymic' => $patronymic,
+                    'dateBirth' => $dateBirth,
+                    'phone' => $phone
+                ]
+            );
 
-				$userID = $pdo->lastInsertId();
+            $userID = $pdo->lastInsertId();
 
-				$user = self::getUser(['id', $userID]);
+            $user = self::getUser(['id', $userID]);
 
-				$userDto = new UserDto(json_encode($user));
-				$tokens = TokenService::generateTokens(json_encode($userDto->getInfoUser()));
-				TokenService::saveToken($userDto->_id, $tokens['refreshToken']);
+            $user['friends'] = UserService::getFriends($user['id']);
 
-				$returnUser = array(
-					'accessToken' => $tokens['accessToken'],
-					'refreshToken' => $tokens['refreshToken'],
-					'user' => $userDto
-				);
+            $userDto = new UserDto(json_encode($user));
+            $tokens = TokenService::generateTokens(json_encode($userDto->getInfoUser()));
+            TokenService::saveToken($userDto->_id, $tokens['refreshToken']);
 
-				return $returnUser;
-			} catch (\Exception $e) {
-				ApiError::InternalServerError($e);
-			}
-		}
+            $returnUser = array(
+                'accessToken' => $tokens['accessToken'],
+                'refreshToken' => $tokens['refreshToken'],
+                'user' => $userDto
+            );
 
-		static public function getUser(array $data) {
-			$typeData = $data[0];
-			$dataValue = $data[1];
+            return $returnUser;
+        } catch (\Exception $e) {
+            ApiError::InternalServerError($e);
+        }
+    }
 
-			$connection = new ConnectionClass();
-			$pdo = $connection->getPDO();
+    static public function getUser(array $data) {
+        $typeData = $data[0];
+        $dataValue = $data[1];
 
-			$sql = "SELECT * FROM users WHERE {$typeData} = :value";
-			$query = $pdo->prepare($sql);
-			$query->execute(['value' => $dataValue]);
+        $connection = new ConnectionClass();
+        $pdo = $connection->getPDO();
 
-			$user = $query->fetch();
+        $sql = "SELECT * FROM users WHERE {$typeData} = :value";
+        $query = $pdo->prepare($sql);
+        $query->execute(['value' => $dataValue]);
 
-			$dateBirth = date('Y-m-d', strtotime($user['date_birth']));
+        $user = $query->fetch();
 
-			$user['date_birth'] = $dateBirth;
+        $dateBirth = date('Y-m-d', strtotime($user['date_birth']));
 
-			return $user;
-		}
+        $user['date_birth'] = $dateBirth;
 
-		static public function editUser(array $data) {
-			$name = $data['name'];
-			$surname = $data['surname'];
-			$patronymic = $data['patronymic'];
-			$dateBirth = $data['dateBirth'];
+        return $user;
+    }
 
-			if ($data['file']) {
-				$tmp_name = $_FILES[0];
-				move_uploaded_file($tmp_name, $_SERVER['DOCUMENT_ROOT']);
-			}
+    static public function editUser(array $data) {
+        $name = $data['name'];
+        $surname = $data['surname'];
+        $patronymic = $data['patronymic'];
+        $dateBirth = $data['dateBirth'];
 
-			$connection = new ConnectionClass();
-			$pdo = $connection->getPDO();
-			$sql = 'UPDATE users SET ';
-		}
+        if ($data['file']) {
+            $tmp_name = $_FILES[0];
+            move_uploaded_file($tmp_name, $_SERVER['DOCUMENT_ROOT']);
+        }
+
+        $connection = new ConnectionClass();
+        $pdo = $connection->getPDO();
+        $sql = 'UPDATE users SET ';
+    }
 }

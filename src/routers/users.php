@@ -10,8 +10,20 @@ use pumast3r\api\exceptions\ApiError;
 use pumast3r\api\services\UserService;
 
 function route($method, $urlData, $formData) {
+    if ($method === 'POST' && $urlData[0] === 'friends' && isset($formData['userId'])) {
+        try {
+            $userId = $formData['userId'];
 
-	if ($method === 'GET' && count($urlData) === 1) {
+            $users = UserService::getFriends($userId);
+            if (count($users) == 0) {
+                ApiError::BadRequest('Пользователей нет');
+            }
+
+            echo json_encode($users);
+        } catch (Exception $e) {
+            ApiError::OptionalError($e);
+        }
+    } else if ($method === 'GET' && count($urlData) === 1) {
 		try {
 			$login = $urlData[0];
 			$user = UserService::getUser(['login', $login]);
@@ -19,6 +31,8 @@ function route($method, $urlData, $formData) {
 			if (!$user) {
 				ApiError::BadRequest('Такого пользователя не существует');
 			}
+
+            $user['friends'] = UserService::getFriends($user['id']);
 
 			$userDto = new UserDto(json_encode($user));
 			$response = $userDto;

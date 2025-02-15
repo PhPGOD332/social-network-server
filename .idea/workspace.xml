@@ -5,8 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ef7a3c14-0046-4a06-a73d-5d22b08cf540" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/codeception.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/codeception.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/phpspec.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/phpspec.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/dtos/UserDto.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/dtos/UserDto.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routers/login.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/routers/login.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/routers/users.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/routers/users.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/services/UserService.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/UserService.php" afterDir="false" />
     </list>
@@ -25,7 +29,7 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="C:\php8\php.exe">
+  <component name="PhpWorkspaceProjectConfiguration" interpreter_name="C:\XAMPP\php\php.exe">
     <include_path>
       <path value="$PROJECT_DIR$/vendor/symfony/polyfill-ctype" />
       <path value="$PROJECT_DIR$/vendor/phpoption/phpoption" />
@@ -66,6 +70,14 @@
       <recent name="G:\Workflow\УрГЭУ\Курсовые\4 сессия\social-network\social-network-server" />
     </key>
   </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-7c0b70fcd90d-JavaScript-PS-242.21829.154" />
+        <option value="bundled-php-predefined-a98d8de5180a-4d9f4c849d09-com.jetbrains.php.sharedIndexes-PS-242.21829.154" />
+      </set>
+    </attachedChunks>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -98,6 +110,10 @@
       <workItem from="1737815967068" duration="4677000" />
       <workItem from="1737886541408" duration="5305000" />
       <workItem from="1738165065360" duration="1472000" />
+      <workItem from="1739180592557" duration="2014000" />
+      <workItem from="1739186880292" duration="1899000" />
+      <workItem from="1739277192998" duration="2029000" />
+      <workItem from="1739525516912" duration="16130000" />
     </task>
     <servers />
   </component>
