@@ -23,6 +23,16 @@ function route($method, $urlData, $formData) {
         } catch (Exception $e) {
             ApiError::OptionalError($e);
         }
+    } else if ($method === 'POST' && $urlData[0] === 'find' && isset($formData['request'])) {
+        try {
+            $request = $formData['request'];
+
+            $users = UserService::findUsers($request);
+
+            echo json_encode($users);
+        } catch (Exception $e) {
+            ApiError::OptionalError($e);
+        }
     } else if ($method === 'GET' && count($urlData) === 1) {
 		try {
 			$login = $urlData[0];

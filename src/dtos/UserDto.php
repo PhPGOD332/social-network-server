@@ -14,7 +14,7 @@ class UserDto {
     public string $phone;
     public string | null $avatar;
     public string $role;
-    public string $friends;
+    public array $friends;
 
     public function __construct(string $user) {
         $decodeUser = json_decode($user, true);
@@ -29,7 +29,7 @@ class UserDto {
         $this->phone = $decodeUser['phone'];
         $this->avatar = $decodeUser['avatar'];
         $this->role = $decodeUser['role'];
-        $this->friends = $decodeUser['friends'];
+        $this->friends = $decodeUser['friends'] ?: [];
     }
 
     public function getInfoUser(): array {

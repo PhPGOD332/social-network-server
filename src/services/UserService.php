@@ -19,8 +19,8 @@ class UserService {
         $listQuery->execute([':user_id' => $userId]);
         $friendsList = $listQuery->fetch();
 
-        if (count($friendsList) == 0) {
-            ApiError::BadRequest('Друзья отсутствую');
+        if ($friendsList !== false && count($friendsList) == 0) {
+            return [];
         }
 
         $sql = 'SELECT * FROM friends WHERE friends_list_id = :id';
@@ -40,6 +40,25 @@ class UserService {
         }
 
         return $returnFriends;
+    }
+
+    public static function findUsers(string $request) {
+        $arrWords = explode(" ", $request);
+        $where = '';
+        if (count($arrWords) > 1) {
+            $where = " WHERE (u.surname LIKE '$arrWords[0]%' AND u.name LIKE '$arrWords[1]%') OR (u.surname LIKE '$arrWords[1]%' AND u.name LIKE '$arrWords[0]%'))";
+        } else {
+            $where = " WHERE u.surname LIKE '$arrWords[0]%' OR u.name LIKE '$arrWords[0]%'";
+        }
+
+        $connection = new ConnectionClass();
+        $pdo = $connection->getPDO();
+        $query = "SELECT * FROM users u LEFT JOIN ".$where;
+        $query = $pdo->prepare($query);
+        $query->execute();
+        $usersList = $query->fetchAll(PDO::FETCH_ASSOC);
+
+        return $usersList;
     }
 
     public static function refresh(string $refreshToken) {
