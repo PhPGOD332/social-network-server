@@ -42,23 +42,33 @@ class UserService {
         return $returnFriends;
     }
 
+    public static function addFriend() {
+
+    }
+
     public static function findUsers(string $request) {
         $arrWords = explode(" ", $request);
         $where = '';
-        if (count($arrWords) > 1) {
-            $where = " WHERE (u.surname LIKE '$arrWords[0]%' AND u.name LIKE '$arrWords[1]%') OR (u.surname LIKE '$arrWords[1]%' AND u.name LIKE '$arrWords[0]%'))";
+        if (count($arrWords) > 1 && $arrWords[1] !== '') {
+            $where = " WHERE (u.surname LIKE '$arrWords[0]%' AND u.name LIKE '$arrWords[1]%') OR (u.surname LIKE '$arrWords[1]%' AND u.name LIKE '$arrWords[0]%')";
         } else {
             $where = " WHERE u.surname LIKE '$arrWords[0]%' OR u.name LIKE '$arrWords[0]%'";
         }
 
         $connection = new ConnectionClass();
         $pdo = $connection->getPDO();
-        $query = "SELECT * FROM users u LEFT JOIN ".$where;
+        $query = "SELECT * FROM users u".$where;
         $query = $pdo->prepare($query);
         $query->execute();
         $usersList = $query->fetchAll(PDO::FETCH_ASSOC);
 
-        return $usersList;
+        $returnUsers = [];
+
+        foreach ($usersList as $key => $user) {
+            $returnUsers[$key] = new UserDto(json_encode($user));
+        }
+
+        return $returnUsers;
     }
 
     public static function refresh(string $refreshToken) {
