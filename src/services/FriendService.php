@@ -80,9 +80,22 @@ class FriendService {
         $query->execute([':id' => $friendsList['id']]);
         $requests = $query->fetchAll(PDO::FETCH_ASSOC);
 
+        $ids = '';
+        foreach ($requests as $request) {
+            if ($request === $requests[count($requests) - 1]) {
+                $ids .= $request['friend_id'];
+            }
+            $ids .= $request['friend_id'] . ', ';
+        }
+
+        $sql = "SELECT * FROM users WHERE id IN (".$ids.")";
+        $query = $pdo->prepare($sql);
+        $query->execute();
+        $users = $query->fetchAll(PDO::FETCH_ASSOC);
+
         $returnRequests = [];
-        foreach ($requests as $key => $request) {
-            $returnRequests[$key] = new UserDto(json_encode($request));
+        foreach ($users as $key => $user) {
+            $returnRequests[$key] = new UserDto(json_encode($user));
         }
 
         return $returnRequests;
