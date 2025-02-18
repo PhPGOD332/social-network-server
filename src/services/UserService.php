@@ -104,6 +104,10 @@ class UserService {
 
             $userID = $pdo->lastInsertId();
 
+            $sql = "INSERT INTO friends_list SET user_id = :user_id, is_private = false";
+            $query = $pdo->prepare($sql);
+            $query->execute(['user_id' => $userID]);
+
             $user = self::getUser(['id', $userID]);
 
             $user['friends'] = FriendService::getFriends($user['id']);

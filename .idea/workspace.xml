@@ -8,6 +8,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/routers/friends.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/routers/friends.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/services/FriendService.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/FriendService.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/UserService.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/UserService.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -110,7 +111,7 @@
       <workItem from="1739277192998" duration="2029000" />
       <workItem from="1739525516912" duration="20045000" />
       <workItem from="1739714589234" duration="13773000" />
-      <workItem from="1739870030321" duration="13426000" />
+      <workItem from="1739870030321" duration="21534000" />
     </task>
     <servers />
   </component>

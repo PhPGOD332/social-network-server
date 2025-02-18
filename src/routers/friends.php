@@ -6,17 +6,7 @@ use pumast3r\api\exceptions\ApiError;
 use pumast3r\api\services\FriendService;
 
 function route($method, $urlData, $formData) {
-    if ($method === 'POST' && $urlData[1] === 'requests') {
-        try {
-            $userId = $formData['userId'];
-
-            $requests = FriendService::getRequests($userId);
-
-            echo json_encode($requests);
-        } catch (\Exception $e) {
-            ApiError::OptionalError($e);
-        }
-    } else if ($method === 'POST' && $urlData[0] === 'requests' && $urlData[1] === 'confirm') {
+    if ($method === 'POST' && $urlData[0] === 'requests' && $urlData[1] === 'confirm') {
         try {
             $userId = $formData['userId'];
             $friendId = $formData['friendId'];
@@ -35,6 +25,16 @@ function route($method, $urlData, $formData) {
             $result = FriendService::rejectRequest($userId, $friendId);
 
             echo json_encode($result);
+        } catch (\Exception $e) {
+            ApiError::OptionalError($e);
+        }
+    } else if ($method === 'POST' && $urlData[0] === 'requests') {
+        try {
+            $userId = $formData['userId'];
+
+            $requests = FriendService::getRequests($userId);
+
+            echo json_encode($requests);
         } catch (\Exception $e) {
             ApiError::OptionalError($e);
         }

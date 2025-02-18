@@ -84,8 +84,13 @@ class FriendService {
         foreach ($requests as $request) {
             if ($request === $requests[count($requests) - 1]) {
                 $ids .= $request['friend_id'];
+            } else {
+                $ids .= $request['friend_id'] . ', ';
             }
-            $ids .= $request['friend_id'] . ', ';
+        }
+
+        if ($ids === '') {
+            return [];
         }
 
         $sql = "SELECT * FROM users WHERE id IN (".$ids.")";
@@ -145,7 +150,14 @@ class FriendService {
                 $query->execute([':list_id' => $list['id'], ':friend_id' => $list['user_id'] == $friendId ? $userId : $friendId]);
             }
 
-            return true;
+            $sql = "SELECT * FROM users WHERE id = :friend_id";
+            $query = $pdo->prepare($sql);
+            $query->execute(['friend_id' => $friendId]);
+
+            $user = $query->fetch();
+            $user = new UserDto(json_encode($user));
+
+            return $user;
         } catch (Exception $e) {
             ApiError::OptionalError($e);
         }
