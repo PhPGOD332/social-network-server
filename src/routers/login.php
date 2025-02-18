@@ -5,6 +5,7 @@ namespace pumast3r\api\routers;
 use Exception;
 use pumast3r\api\dtos\UserDto;
 use pumast3r\api\exceptions\ApiError;
+use pumast3r\api\services\FriendService;
 use pumast3r\api\services\TokenService;
 use pumast3r\api\helpers\DotenvClass;
 use pumast3r\api\services\UserService;
@@ -31,7 +32,7 @@ function route($method, $urlData, $formData) {
 //                echo "Неверный пароль";
             }
 
-            $user['friends'] = UserService::getFriends($user['id']);
+            $user['friends'] = FriendService::getFriends($user['id']);
 
             $userDto = new UserDto(json_encode($user));
             $tokens = TokenService::generateTokens(json_encode($userDto->getInfoUser()));

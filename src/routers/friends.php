@@ -19,6 +19,27 @@ function route($method, $urlData, $formData) {
         } catch (\Exception $e) {
             ApiError::OptionalError($e);
         }
+    } else if ($method === 'POST' && $urlData[0] === 'requests') {
+        try {
+            $userId = $urlData['userId'];
+
+            $requests = FriendService::getRequests($userId);
+
+            echo json_encode($requests);
+        } catch (\Exception $e) {
+            ApiError::OptionalError($e);
+        }
+    } else if ($method === 'POST' && $urlData[0] === 'requests' && $urlData[1] === 'confirm') {
+        try {
+            $userId = $urlData['userId'];
+            $friendId = $urlData['friendId'];
+
+            $result = FriendService::confirmRequest($userId, $friendId);
+
+            echo json_encode($result);
+        } catch (\Exception $e) {
+            ApiError::OptionalError($e);
+        }
     } else if ($method === 'POST' && $urlData[0] === 'add') {
         try {
             $userId = $formData['userId'];

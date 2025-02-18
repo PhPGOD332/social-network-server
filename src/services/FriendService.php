@@ -60,4 +60,57 @@ class FriendService {
             ApiError::OptionalError($e);
         }
     }
+
+    public static function getRequests($userId) {
+        if (!$userId) {
+            ApiError::BadRequest("Некорректный пользователь");
+        }
+
+        $connection = new ConnectionClass();
+        $pdo = $connection->getPDO();
+        $sql = 'SELECT * FROM friends_list WHERE user_id = :user_id';
+        $query = $pdo->prepare($sql);
+        $query->execute([':user_id' => $userId]);
+        $friendsList = $query->fetch();
+
+        $sql = 'SELECT * FROM friends WHERE friends_list_id = :id AND is_confirmed = false';
+        $query = $pdo->prepare($sql);
+        $query->execute([':id' => $friendsList['id']]);
+        $requests = $query->fetchAll(PDO::FETCH_ASSOC);
+
+        $returnRequests = [];
+        foreach ($requests as $key => $request) {
+            $returnRequests[$key] = new UserDto(json_encode($request));
+        }
+
+        return $returnRequests;
+    }
+
+    public static function confirmRequest($userId, $friendId) {
+        try {
+            $connection = new ConnectionClass();
+            $pdo = $connection->getPDO();
+
+            $sql = "SELECT * FROM friends_list WHERE user_id = :userId OR user_id = :friendId";
+            $query = $pdo->prepare($sql);
+            $query->execute([':userId' => $userId, ':friendId' => $friendId]);
+            $friendsLists = $query->fetchAll(PDO::FETCH_ASSOC);
+
+            foreach ($friendsLists as $key => $list) {
+                $sql = "UPDATE friends SET is_confirmed = true WHERE friends_list_id = :list_id AND friend_id = :friend_id";
+                $query = $pdo->prepare($sql);
+                $query->execute([':list_id' => $list['id'], ':friend_id' => $list['user_id'] == $friendId ? $userId : $friendId]);
+            }
+
+            $sql = "SELECT * FROM users WHERE id = :id";
+            $query = $pdo->prepare($sql);
+            $query->execute([':id' => $friendId]);
+            $newFriend = $query->fetch();
+            $newFriend = new UserDto(json_encode($newFriend));
+
+            return $newFriend;
+        } catch (Exception $e) {
+            ApiError::OptionalError($e);
+        }
+    }
 }
