@@ -1,5 +1,7 @@
 <?php
 
+namespace pumast3r\api\routers;
+
 use pumast3r\api\services\FriendService;
 
 function route($method, $urlData, $formData) {
