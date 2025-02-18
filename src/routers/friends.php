@@ -21,7 +21,7 @@ function route($method, $urlData, $formData) {
         }
     } else if ($method === 'POST' && $urlData[0] === 'requests') {
         try {
-            $userId = $urlData['userId'];
+            $userId = $formData['userId'];
 
             $requests = FriendService::getRequests($userId);
 
@@ -31,8 +31,8 @@ function route($method, $urlData, $formData) {
         }
     } else if ($method === 'POST' && $urlData[0] === 'requests' && $urlData[1] === 'confirm') {
         try {
-            $userId = $urlData['userId'];
-            $friendId = $urlData['friendId'];
+            $userId = $formData['userId'];
+            $friendId = $formData['friendId'];
 
             $result = FriendService::confirmRequest($userId, $friendId);
 
