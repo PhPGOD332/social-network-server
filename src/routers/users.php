@@ -30,7 +30,7 @@ function route($method, $urlData, $formData) {
 				ApiError::BadRequest('Такого пользователя не существует');
 			}
 
-            $user['friends'] = UserService::getFriends($user['id']);
+            $user['friends'] = FriendService::getFriends($user['id']);
 
 			$userDto = new UserDto(json_encode($user));
 			$response = $userDto;

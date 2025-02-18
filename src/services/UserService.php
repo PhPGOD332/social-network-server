@@ -49,7 +49,7 @@ class UserService {
 
         $user = self::getUser(['id', $tokenFromDb['user_id']]);
 
-        $user['friends'] = UserService::getFriends($user['id']);
+        $user['friends'] = FriendService::getFriends($user['id']);
 
         $userDto = new UserDto(json_encode($user));
         $tokens = TokenService::generateTokens(json_encode($userDto->getInfoUser()));
@@ -106,7 +106,7 @@ class UserService {
 
             $user = self::getUser(['id', $userID]);
 
-            $user['friends'] = UserService::getFriends($user['id']);
+            $user['friends'] = FriendService::getFriends($user['id']);
 
             $userDto = new UserDto(json_encode($user));
             $tokens = TokenService::generateTokens(json_encode($userDto->getInfoUser()));
