@@ -10,42 +10,6 @@ use pumast3r\api\exceptions\ApiError;
 
 class UserService {
 
-    public static function getFriends(string $userId) {
-        $connection = new ConnectionClass();
-        $pdo = $connection->getPDO();
-
-        $sql = 'SELECT * FROM friends_list WHERE user_id = :user_id';
-        $listQuery = $pdo->prepare($sql);
-        $listQuery->execute([':user_id' => $userId]);
-        $friendsList = $listQuery->fetch();
-
-        if ($friendsList !== false && count($friendsList) == 0) {
-            return [];
-        }
-
-        $sql = 'SELECT * FROM friends WHERE friends_list_id = :id';
-        $friendsQuery = $pdo->prepare($sql);
-        $friendsQuery->execute([':id' => $friendsList['id']]);
-        $friends = $friendsQuery->fetchAll(PDO::FETCH_ASSOC);
-
-        $returnFriends = [];
-
-        foreach ($friends as $key => $friend) {
-            $sql = 'SELECT * FROM users WHERE id = :id';
-            $userQuery = $pdo->prepare($sql);
-            $userQuery->execute([':id' => $friend['friend_id']]);
-            $user = $userQuery->fetch(PDO::FETCH_ASSOC);
-            $newFriend = new UserDto(json_encode($user));
-            $returnFriends[$key] = $newFriend;
-        }
-
-        return $returnFriends;
-    }
-
-    public static function addFriend() {
-
-    }
-
     public static function findUsers(string $request) {
         $arrWords = explode(" ", $request);
         $where = '';

@@ -7,23 +7,11 @@ use Exception;
 use pumast3r\api\connect\ConnectionClass;
 use pumast3r\api\dtos\UserDto;
 use pumast3r\api\exceptions\ApiError;
+use pumast3r\api\services\FriendService;
 use pumast3r\api\services\UserService;
 
 function route($method, $urlData, $formData) {
-    if ($method === 'POST' && $urlData[0] === 'friends' && isset($formData['userId'])) {
-        try {
-            $userId = $formData['userId'];
-
-            $users = UserService::getFriends($userId);
-            if (count($users) == 0) {
-                ApiError::BadRequest('Пользователей нет');
-            }
-
-            echo json_encode($users);
-        } catch (Exception $e) {
-            ApiError::OptionalError($e);
-        }
-    } else if ($method === 'POST' && $urlData[0] === 'find' && isset($formData['request'])) {
+    if ($method === 'POST' && $urlData[0] === 'find' && isset($formData['request'])) {
         try {
             $request = $formData['request'];
 

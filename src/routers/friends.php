@@ -2,22 +2,40 @@
 
 namespace pumast3r\api\routers;
 
+use pumast3r\api\exceptions\ApiError;
 use pumast3r\api\services\FriendService;
 
 function route($method, $urlData, $formData) {
-    if ($method == 'POST' && $urlData[0] === 'add') {
-        $userId = $formData['user']['_id'];
-        $friendId = $formData['friend']['_id'];
+    if ($method === 'POST' && isset($formData['userId'])) {
+        try {
+            $userId = $formData['userId'];
 
-        $result = FriendService::addFriend($userId, $friendId);
-        $return = '';
+            $users = FriendService::getFriends($userId);
+            if (count($users) == 0) {
+                ApiError::BadRequest('Пользователей нет');
+            }
 
-        if (!$result) {
-            $return = ['error' => 'При отправке заявки произошла ошибка'];
-        } else {
-            $return = ['success' => 'Заявка успешно отправлена'];
+            echo json_encode($users);
+        } catch (\Exception $e) {
+            ApiError::OptionalError($e);
         }
+    } else if ($method === 'POST' && $urlData[0] === 'add') {
+        try {
+            $userId = $formData['userId'];
+            $friendId = $formData['friendId'];
 
-        echo json_encode($return);
+            $result = FriendService::addFriend($userId, $friendId);
+            $return = '';
+
+            if (!$result) {
+                $return = ['error' => 'При отправке заявки произошла ошибка'];
+            } else {
+                $return = ['success' => 'Заявка успешно отправлена'];
+            }
+
+            echo json_encode($return);
+        } catch (\Error $e) {
+            echo json_encode(['error' => $e->getMessage()]);
+        }
     }
 }
