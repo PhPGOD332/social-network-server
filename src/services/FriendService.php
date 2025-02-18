@@ -47,15 +47,17 @@ class FriendService {
             $connection = new ConnectionClass();
             $pdo = $connection->getPDO();
 
-            $sql = "SELECT * FROM friends_list WHERE user_id = :user_id";
+            $sql = "SELECT * FROM friends_list WHERE user_id = :user_id OR user_id = :friend_id";
             $query = $pdo->prepare($sql);
-            $query->execute(['user_id' => $userId]);
-            $friendsList = $query->fetch();
+            $query->execute(['user_id' => $userId, 'friend_id' => $friendId]);
+            $friendsList = $query->fetchAll(PDO::FETCH_ASSOC);
 
-            $sql = "INSERT INTO friends SET friend_id = :friend_id, friends_list_id = :friends_list_id, is_confirmed = false";
-            $query = $pdo->prepare($sql);
-            $query->execute(['friend_id' => $friendId, 'friends_list_id' => $friendsList['id']]);
-            return $query;
+            foreach ($friendsList as $list) {
+                $sql = "INSERT INTO friends SET friend_id = :friend_id, friends_list_id = :friends_list_id, is_confirmed = false";
+                $query = $pdo->prepare($sql);
+                $query->execute([':friend_id' => $list['user_id'] == $friendId ? $userId : $friendId, ':friends_list_id' => $list['id']]);
+            }
+            return true;
         } catch (Exception $e) {
             ApiError::OptionalError($e);
         }
@@ -109,6 +111,28 @@ class FriendService {
             $newFriend = new UserDto(json_encode($newFriend));
 
             return $newFriend;
+        } catch (Exception $e) {
+            ApiError::OptionalError($e);
+        }
+    }
+
+    public static function rejectRequest($userId, $friendId) {
+        try {
+            $connection = new ConnectionClass();
+            $pdo = $connection->getPDO();
+
+            $sql = "SELECT * FROM friends_list WHERE user_id = :userId OR user_id = :friendId";
+            $query = $pdo->prepare($sql);
+            $query->execute([':userId' => $userId, ':friendId' => $friendId]);
+            $friendsLists = $query->fetchAll(PDO::FETCH_ASSOC);
+
+            foreach ($friendsLists as $key => $list) {
+                $sql = "DELETE FROM friends WHERE friends_list_id = :list_id AND friend_id = :friend_id";
+                $query = $pdo->prepare($sql);
+                $query->execute([':list_id' => $list['id'], ':friend_id' => $list['user_id'] == $friendId ? $userId : $friendId]);
+            }
+
+            return true;
         } catch (Exception $e) {
             ApiError::OptionalError($e);
         }

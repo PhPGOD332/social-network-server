@@ -6,7 +6,7 @@ use pumast3r\api\exceptions\ApiError;
 use pumast3r\api\services\FriendService;
 
 function route($method, $urlData, $formData) {
-    if ($method === 'POST' && isset($formData['userId'])) {
+    if ($method === 'POST' && isset($formData['userId']) && !isset($urlData[1])) {
         try {
             $userId = $formData['userId'];
 
@@ -19,7 +19,7 @@ function route($method, $urlData, $formData) {
         } catch (\Exception $e) {
             ApiError::OptionalError($e);
         }
-    } else if ($method === 'POST' && $urlData[0] === 'requests') {
+    } else if ($method === 'POST' && $urlData[1] === 'requests') {
         try {
             $userId = $formData['userId'];
 
@@ -29,7 +29,7 @@ function route($method, $urlData, $formData) {
         } catch (\Exception $e) {
             ApiError::OptionalError($e);
         }
-    } else if ($method === 'POST' && $urlData[0] === 'requests' && $urlData[1] === 'confirm') {
+    } else if ($method === 'POST' && $urlData[1] === 'requests' && $urlData[2] === 'confirm') {
         try {
             $userId = $formData['userId'];
             $friendId = $formData['friendId'];
@@ -40,7 +40,18 @@ function route($method, $urlData, $formData) {
         } catch (\Exception $e) {
             ApiError::OptionalError($e);
         }
-    } else if ($method === 'POST' && $urlData[0] === 'add') {
+    } else if ($method === 'POST' && $urlData[1] === 'requests' && $urlData[2] === 'reject') {
+        try {
+            $userId = $formData['userId'];
+            $friendId = $formData['friendId'];
+
+            $result = FriendService::rejectRequest($userId, $friendId);
+
+            echo json_encode($result);
+        } catch (\Exception $e) {
+            ApiError::OptionalError($e);
+        }
+    } else if ($method === 'POST' && $urlData[1] === 'add') {
         try {
             $userId = $formData['userId'];
             $friendId = $formData['friendId'];
