@@ -38,21 +38,25 @@ function route($method, $urlData, $formData) {
         } catch (\Exception $e) {
             ApiError::OptionalError($e);
         }
+    } else if ($method === 'POST' && $urlData[0] === 'remove') {
+        try {
+            $userId = $formData['userId'];
+            $friendId = $formData['friendId'];
+
+            $removedFriend = FriendService::removeFriend($userId, $friendId);
+
+            echo json_encode($removedFriend);
+        } catch (\Exception $e) {
+            ApiError::OptionalError($e);
+        }
     } else if ($method === 'POST' && $urlData[0] === 'add') {
         try {
             $userId = $formData['userId'];
             $friendId = $formData['friendId'];
 
-            $result = FriendService::addFriend($userId, $friendId);
-            $return = '';
+            $addedFriend = FriendService::addFriend($userId, $friendId);
 
-            if (!$result) {
-                $return = ['error' => 'При отправке заявки произошла ошибка'];
-            } else {
-                $return = ['success' => 'Заявка успешно отправлена'];
-            }
-
-            echo json_encode($return);
+            echo json_encode($addedFriend);
         } catch (\Error $e) {
             echo json_encode(['error' => $e->getMessage()]);
         }

@@ -42,6 +42,33 @@ class FriendService {
         return $returnFriends;
     }
 
+    public static function removeFriend($userId, $friendId) {
+        try {
+            $connection = new ConnectionClass();
+            $pdo = $connection->getPDO();
+            $sql = "SELECT * FROM friends_list WHERE user_id = :user_id OR friend_id = :friend_id";
+            $query = $pdo->prepare($sql);
+            $query->execute([':user_id' => $userId, ':friend_id' => $friendId]);
+            $friendsLists = $query->fetchAll(PDO::FETCH_ASSOC);
+
+            foreach ($friendsLists as $key => $list) {
+                $sql = "DELETE FROM friends WHERE friends_list_id = :list_id AND friend_id = :friend_id";
+                $query = $pdo->prepare($sql);
+                $query->execute([':list_id' => $list['id'], ':friend_id' => $list['user_id'] === $friendId ? $userId : $friendId]);
+            }
+
+            $sql = "SELECT * FROM users WHERE id = :id";
+            $query = $pdo->prepare($sql);
+            $query->execute([':id' => $friendId]);
+            $removedFriend = $query->fetch();
+            $removedFriend = new UserDto(json_encode($removedFriend));
+
+            return $removedFriend;
+        } catch (Exception $e) {
+            ApiError::OptionalError($e);
+        }
+    }
+
     public static function addFriend($userId, $friendId) {
         try {
             $connection = new ConnectionClass();
@@ -50,14 +77,22 @@ class FriendService {
             $sql = "SELECT * FROM friends_list WHERE user_id = :user_id OR user_id = :friend_id";
             $query = $pdo->prepare($sql);
             $query->execute(['user_id' => $userId, 'friend_id' => $friendId]);
-            $friendsList = $query->fetchAll(PDO::FETCH_ASSOC);
+            $friendsLists = $query->fetchAll(PDO::FETCH_ASSOC);
 
-            foreach ($friendsList as $list) {
+            foreach ($friendsLists as $list) {
                 $sql = "INSERT INTO friends SET friend_id = :friend_id, friends_list_id = :friends_list_id, is_confirmed = false";
                 $query = $pdo->prepare($sql);
                 $query->execute([':friend_id' => $list['user_id'] == $friendId ? $userId : $friendId, ':friends_list_id' => $list['id']]);
             }
-            return true;
+
+            $sql = "SELECT * FROM users WHERE id = :id";
+            $query = $pdo->prepare($sql);
+            $query->execute([':id' => $friendId]);
+
+            $addedFriend = $query->fetch();
+            $addedFriend = new UserDto(json_encode($addedFriend));
+
+            return $addedFriend;
         } catch (Exception $e) {
             ApiError::OptionalError($e);
         }
