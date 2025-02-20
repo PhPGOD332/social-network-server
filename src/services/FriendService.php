@@ -46,7 +46,7 @@ class FriendService {
         try {
             $connection = new ConnectionClass();
             $pdo = $connection->getPDO();
-            $sql = "SELECT * FROM friends_list WHERE user_id = :user_id OR friend_id = :friend_id";
+            $sql = "SELECT * FROM friends_list WHERE user_id = :user_id OR user_id = :friend_id";
             $query = $pdo->prepare($sql);
             $query->execute([':user_id' => $userId, ':friend_id' => $friendId]);
             $friendsLists = $query->fetchAll(PDO::FETCH_ASSOC);
