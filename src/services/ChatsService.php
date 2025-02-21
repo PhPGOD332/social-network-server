@@ -22,17 +22,18 @@ class ChatsService {
             $returnChats = array();
 
             foreach ($chats as $chat) {
+                $sql = "SELECT * FROM chat_participants cp JOIN users u ON cp.user_id = u.id WHERE chat_id = :chat_id AND user_id <> :user_id";
+                $query = $pdo->prepare($sql);
+                $query->execute(['chat_id' => $chat['chat_id'], 'user_id' => $userId]);
+                $sender = $query->fetch();
+                $sender = new UserDto(json_encode($sender));
+
                 $sql = "SELECT * FROM messages WHERE chat_id = :chat_id ORDER BY created_at DESC LIMIT 1";
                 $query = $pdo->prepare($sql);
                 $query->execute(['chat_id' => $chat['chat_id']]);
                 $lastMessage = $query->fetch(PDO::FETCH_ASSOC);
 
-                $sql = "SELECT * FROM users WHERE id = :user_id";
-                $query = $pdo->prepare($sql);
-                $query->execute(['user_id' => $lastMessage['user_id']]);
-                $sender = $query->fetch(PDO::FETCH_ASSOC);
-
-                $chat = [$chat['chat_id'], $chat['created_by'], $chat['created_at'], 'sender' => $sender, 'lastMessage' => $lastMessage];
+                $chat = ['_id' => $chat['chat_id'], 'created_by' => $chat['created_by'], 'created_at' => $chat['created_at'], 'sender' => $sender, 'lastMessage' => $lastMessage];
 
                 array_push($returnChats, $chat);
             }
