@@ -7,7 +7,7 @@ use pumast3r\api\exceptions\ApiError;
 use pumast3r\api\services\ChatsService;
 
 function route($method, $urlData, $formData) {
-    if ($method === 'GET' && $urlData[0] === 'chats') {
+    if ($method === 'POST' && count($urlData) === 0) {
         try {
             $userId = $formData['userId'];
 
