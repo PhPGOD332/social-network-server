@@ -9,6 +9,22 @@ use pumast3r\api\dtos\UserDto;
 use pumast3r\api\exceptions\ApiError;
 
 class ChatsService {
+    public static function getAllMessages($chatId) {
+        try {
+            $connection = new ConnectionClass();
+            $pdo = $connection->getPDO();
+
+            $sql = "SELECT * FROM messages WHERE chat_id = :chatId ORDER BY created_at DESC";
+            $query = $pdo->prepare($sql);
+            $query->execute(['chatId' => $chatId]);
+            $messages = $query->fetchAll(PDO::FETCH_ASSOC);
+
+            return $messages;
+        } catch (Exception $e) {
+            ApiError::OptionalError($e);
+        }
+    }
+
     public static function getChats($userId) {
         try {
             $connection = new ConnectionClass();

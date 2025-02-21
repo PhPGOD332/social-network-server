@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="ef7a3c14-0046-4a06-a73d-5d22b08cf540" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/exceptions/ApiError.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/exceptions/ApiError.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/routers/chats.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/routers/chats.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/services/ChatsService.php" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/ChatsService.php" afterDir="false" />
     </list>
@@ -113,7 +114,7 @@
       <workItem from="1739870030321" duration="24068000" />
       <workItem from="1739964729085" duration="11210000" />
       <workItem from="1740032831891" duration="7949000" />
-      <workItem from="1740145509614" duration="5217000" />
+      <workItem from="1740145509614" duration="9681000" />
     </task>
     <servers />
   </component>
